@@ -1,9 +1,5 @@
 package org.mineacademy.novum;
 
-import org.mineacademy.novum.house.House;
-import org.mineacademy.novum.person.Employee;
-import org.mineacademy.novum.person.Person;
-
 import java.util.Scanner;
 
 public class Novum {
@@ -15,14 +11,15 @@ public class Novum {
 	public static void main(String[] args) {
 		Novum novum = new Novum();
 
-		try{ //error stuff bellow
+		try { //error stuff bellow
 			novum.loop();
-		}catch (Throwable t){
+		} catch (Throwable t) {
 			System.out.println("There is an error somewhere, you fucked up!" + t.getMessage());
 			t.printStackTrace();
 		}
 	}
-	private void loop(){ //main calculator loop
+
+	private void loop() { //main calculator loop
 
 		Scanner scanner = new Scanner(System.in); //"We have detected no contraband in your suitcase sir."
 		String message = "";
@@ -31,17 +28,22 @@ public class Novum {
 		int mode = LEFT_NUMBER; // left number, 1 right number, 2 = operator (+ - / *)
 		double leftNumber = 0, rightNumber = 0; //makin' them double
 
-		while(!message.equals("exit")) { //loop-killer + calculator
+		while (!message.equals("exit")) { //loop-killer + calculator
 
-			if (mode > OPERATOR)
-				mode = 0;
-
-			if (mode == LEFT_NUMBER)
-				 System.out.println("First number please");
-			else if (mode == RIGHT_NUMBER)
-				 System.out.println("Second one please");
-			else
-				 System.out.println("Now the operator, please!");
+			switch (mode) {
+				case LEFT_NUMBER:
+					System.out.println("First number please");
+					break;
+				case RIGHT_NUMBER:
+					System.out.println("Second one please");
+					break;
+				case OPERATOR:
+					System.out.println("Now the operator, please!");
+					break;
+				default:
+					mode = LEFT_NUMBER;
+					continue;
+			}
 
 			message = scanner.nextLine();
 			System.out.println("You typed: " + message);
@@ -62,27 +64,41 @@ public class Novum {
 					continue;
 				}
 
-			else if ("+".equals(message))
-				System.out.println(leftNumber + " + " +  rightNumber + " = " + (leftNumber + rightNumber));
-
-			else if ("-".equals(message))
-				System.out.println(leftNumber + " - " +  rightNumber + " = " + (leftNumber - rightNumber));
-
-			else if ("/".equals(message))
-				System.out.println(leftNumber + " / " +  rightNumber + " = " + (leftNumber / rightNumber));
-
-			else if ("*".equals(message))
-				System.out.println(leftNumber + " * " +  rightNumber + " = " + (leftNumber * rightNumber));
-
-			else if ("%".equals(message))
-				System.out.println("I refuse to modulo!");
-
-			else {
-				System.out.println(message + " ...You think that this is an operator? Use proper operators, you filthy ram-downloader!");
-				System.out.println("I used break on purpose, since continue wasn't available for some reason");
-				break;
+//				RESULT = rightNumber message Leftnumber
+			if (mode == OPERATOR) {
+				double RESULT;
+				switch (message) {
+					case "+":
+						RESULT = (leftNumber + rightNumber);
+						break;
+					//Do something
+					case "-":
+						RESULT = (leftNumber - rightNumber);
+						break;
+					//DO something
+					case "/":
+						RESULT = (leftNumber / rightNumber);
+						break;
+					//Do something
+					case "*":
+						RESULT = (leftNumber * rightNumber);
+						break;
+					//Do something
+					case "%":
+						RESULT = (leftNumber % rightNumber);
+						break;
+					//Do something
+					default:
+						System.out.println(message + " ...You think that this is an operator? Use proper operators, you filthy ram-downloader!");
+						System.out.println("I used break on purpose, since continue wasn't available for some reason");
+						continue;
+				}
+				if (Double.isNaN(RESULT)) {
+					System.out.println("something went wrong");
+				} else {
+					System.out.println(leftNumber + " " + message + " " + rightNumber + " = " + RESULT);
+				}
 			}
-
 			mode++;
 		}
 
