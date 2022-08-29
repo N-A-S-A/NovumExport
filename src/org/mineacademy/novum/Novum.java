@@ -25,9 +25,10 @@ public class Novum {
 	private void loop(){ //main calculator loop
 
 		Scanner scanner = new Scanner(System.in); //"We have detected no contraband in your suitcase sir."
-		String message = "0";
-		int mode = LEFT_NUMBER; // left number, 1 right number, 2 = operator (+ - / *)
+		String message = "";
 
+
+		int mode = LEFT_NUMBER; // left number, 1 right number, 2 = operator (+ - / *)
 		double leftNumber = 0, rightNumber = 0; //makin' them double
 
 		while(!message.equals("exit")) { //loop-killer + calculator
@@ -35,20 +36,31 @@ public class Novum {
 			if (mode > OPERATOR)
 				mode = 0;
 
-			 if (mode == LEFT_NUMBER)
+			if (mode == LEFT_NUMBER)
 				 System.out.println("First number please");
-			 else if (mode == RIGHT_NUMBER)
+			else if (mode == RIGHT_NUMBER)
 				 System.out.println("Second one please");
-			 else
+			else
 				 System.out.println("Now the operator, please!");
 
+			message = scanner.nextLine();
 			System.out.println("You typed: " + message);
 
 			if (mode == LEFT_NUMBER)
-				leftNumber = Double.parseDouble(message);
+				try {
+					leftNumber = Double.parseDouble(message);
+				} catch (NumberFormatException ex) {
+					System.out.println("Invalid left number: " + message);
+					continue;
+				}
 
 			else if (mode == RIGHT_NUMBER)
-				rightNumber = Double.parseDouble(message);
+				try {
+					rightNumber = Double.parseDouble(message);
+				} catch (NumberFormatException ex) {
+					System.out.println("Invalid right number: " + message);
+					continue;
+				}
 
 			else if ("+".equals(message))
 				System.out.println(leftNumber + " + " +  rightNumber + " = " + (leftNumber + rightNumber));
@@ -71,8 +83,6 @@ public class Novum {
 				break;
 			}
 
-
-			message = scanner.nextLine();
 			mode++;
 		}
 
